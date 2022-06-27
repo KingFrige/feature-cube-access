@@ -1,5 +1,13 @@
 # README
 
+## addr info
+
+```
+[5:0]   - byteIdx
+[19:6]  - entryIdx
+[22:20] - bankIdx
+```
+
 ## function
 
 - feature cube address generate
