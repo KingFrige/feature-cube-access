@@ -1,5 +1,7 @@
 # README
 
+## function
+
 - feature cube address generate
 
 - skip mode
@@ -12,3 +14,9 @@
   * plane skip
   * cube skip
   * wrap skip
+
+## run
+
+```bash
+$ make
+```
