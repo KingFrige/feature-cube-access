@@ -4,11 +4,25 @@
 
 using namespace std;
 
+int get_skip_addr(int base_addr, bool isInterleave, int wrap_skip, int normal_skip){
+  int raw_addr = base_addr + normal_skip;
+  int raw_addr_bankIdx = (raw_addr>>19) & 0xf;
+  int normal_skip_addr = raw_addr & (~(-1<<22));
+
+  int interleave_skip_addr = normal_skip_addr;
+  if(raw_addr_bankIdx>7){
+    interleave_skip_addr = interleave_skip_addr + wrap_skip;
+  }
+  int skip_addr = isInterleave ? interleave_skip_addr:normal_skip_addr;
+
+  return skip_addr;
+}
+
 int *get_ref_addr(int base_addr, bool isInterleave, int unit_skip, int slice_skip, int plane_skip, int wrap_skip, int cube_skip){
   int cube_num  = 1;
-  int plane_num = 16;
-  int slice_num = 2;
-  int unit_num  = 8;
+  int plane_num = 9;
+  int slice_num = 9;
+  int unit_num  = 2;
   int *cubeAddrPoint = new int[cube_num*plane_num*slice_num*unit_num];
 
   int cube_addr  = base_addr;
@@ -17,26 +31,22 @@ int *get_ref_addr(int base_addr, bool isInterleave, int unit_skip, int slice_ski
   int unit_addr  = cube_addr;
 
   cout<<"base_addr= "<<base_addr<<", unit_skip= "<<unit_skip<<", slice_skip= "<<slice_skip<<", plane_skip= "<<plane_skip<<", wrap_skip= "<<wrap_skip<<", cube_skip= "<<cube_skip<<endl;
+  cout << "isInterleave = " << isInterleave << endl;
   for(int cubeCnt=0; cubeCnt<cube_num;cubeCnt++){
-    cube_addr = base_addr + cube_skip * cubeCnt;
+    plane_addr = cube_addr;
+    cube_addr = get_skip_addr(cube_addr, isInterleave, wrap_skip, cube_skip);
     for(int planeCnt=0; planeCnt<plane_num;planeCnt++){
-      plane_addr = cube_addr + plane_skip * planeCnt;
       cout << "planeCnt = " << planeCnt << endl;
+      slice_addr = plane_addr;
+      plane_addr = get_skip_addr(plane_addr, isInterleave, wrap_skip, plane_skip);
       for(int sliceCnt=0; sliceCnt<slice_num;sliceCnt++){
-        slice_addr = plane_addr + slice_skip * sliceCnt;
+        unit_addr  = slice_addr;
+        slice_addr = get_skip_addr(slice_addr, isInterleave, wrap_skip, slice_skip);
         for(int unitCnt=0; unitCnt<unit_num;unitCnt++){
-          int raw_addr = slice_addr + unit_skip * unitCnt;
-          int raw_addr_bankIdx = (raw_addr>>19) & 0xf;
-          int normal_skip_addr = raw_addr & (~(-1<<22));
-
-          int interleave_skip_addr = normal_skip_addr;
-          if(raw_addr_bankIdx>7){
-            interleave_skip_addr = interleave_skip_addr + wrap_skip;
-          }
-          unit_addr = isInterleave ? interleave_skip_addr:normal_skip_addr;
           int idx = cubeCnt*plane_num*slice_num*unit_num + planeCnt*slice_num*unit_num + sliceCnt*unit_num + unitCnt;
           cout << "idx = " << idx << ", unit_addr = " << unit_addr << endl;
           cubeAddrPoint[idx] = unit_addr;
+          unit_addr += unit_skip;
         }
       }
     }
@@ -95,6 +105,20 @@ int main(){
   get_ref_addr(base_addr,        false,        32,        448,      524288*4,          0,        0);
   get_ref_addr(base_addr,        false,        64,        768,      524288*4,          0,        0);
 
-  get_ref_addr(base_addr,         true,        64,        768,        524288,       1536,        0);
+  get_ref_addr(base_addr,         true,         8,         16,        524288,         32,        0);
+  get_ref_addr(base_addr,         true,        16,         32,        524288,         64,        0);
+  get_ref_addr(base_addr,         true,        32,         64,        524288,        128,        0);
+  get_ref_addr(base_addr,         true,        64,        128,        524288,        256,        0);
+  get_ref_addr(base_addr,         true,      1280,         64,        524288,        128,        0);
+  get_ref_addr(base_addr,         true,        32,       1792,        524288,         64,        0);
+  get_ref_addr(base_addr,         true,        64,       3072,        524288,        128,        0);
+
+  get_ref_addr(base_addr,         true,         8,     524288,            32,         16,        0);
+  get_ref_addr(base_addr,         true,        16,     524288,            64,         32,        0);
+  get_ref_addr(base_addr,         true,        32,     524288,           128,         64,        0);
+  get_ref_addr(base_addr,         true,        64,     524288,           256,        128,        0);
+  get_ref_addr(base_addr,         true,      1280,     524288,           128,         64,        0);
+  get_ref_addr(base_addr,         true,        32,     524288,            64,       1792,        0);
+  get_ref_addr(base_addr,         true,        64,     524288,           128,       3072,        0);
 }
 
