@@ -5,10 +5,10 @@
 using namespace std;
 
 int *get_ref_addr(int base_addr, bool isInterleave, int unit_skip, int slice_skip, int plane_skip, int wrap_skip, int cube_skip){
-  int cube_num  = 2;
-  int plane_num = 2;
+  int cube_num  = 1;
+  int plane_num = 16;
   int slice_num = 2;
-  int unit_num  = 2;
+  int unit_num  = 8;
   int *cubeAddrPoint = new int[cube_num*plane_num*slice_num*unit_num];
 
   int cube_addr  = base_addr;
@@ -95,6 +95,6 @@ int main(){
   get_ref_addr(base_addr,        false,        32,        448,      524288*4,          0,        0);
   get_ref_addr(base_addr,        false,        64,        768,      524288*4,          0,        0);
 
-  get_ref_addr(base_addr,         true,        64,        768,        524288,        768,        0);
+  get_ref_addr(base_addr,         true,        64,        768,        524288,       1536,        0);
 }
 
