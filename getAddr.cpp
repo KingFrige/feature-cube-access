@@ -64,61 +64,84 @@ int main(){
     cout << ">>> " << p[i] << endl;
   }
 
-  //           base_addr  isInterleave  unit_skip  slice_skip     plane_skip   wrap_skip  cube_skip
-  get_ref_addr(base_addr,        false,         8,         16,            32,          0,        0);
-  get_ref_addr(base_addr,        false,        16,         32,            64,          0,        0);
-  get_ref_addr(base_addr,        false,        32,         64,           128,          0,        0);
-  get_ref_addr(base_addr,        false,        64,        128,           256,          0,        0);
-  get_ref_addr(base_addr,        false,       640,        128,        524288,          0,        0);
-  get_ref_addr(base_addr,        false,        32,        448,        524288,          0,        0);
-  get_ref_addr(base_addr,        false,        64,        768,        524288,          0,        0);
+  // normal skip
+  //   base_addr  isInterleave  unit_skip  slice_skip     plane_skip   wrap_skip  cube_skip
+  int normal_skip_param_array[][5] = {
+          {   8,         16,            32,          0,        0},
+          {  16,         32,            64,          0,        0},
+          {  32,         64,           128,          0,        0},
+          {  64,        128,           256,          0,        0},
+          { 640,        128,        524288,          0,        0},
+          {  32,        448,        524288,          0,        0},
+          {  64,        768,        524288,          0,        0},
+          {  64,        524288*1,      128,          0,        0},
+          { 640,        524288*1,     1280,          0,        0},
+          {  64,        524288*2,      128,          0,        0},
+          { 640,        524288*2,     1280,          0,        0},
+          {  64,        524288*4,      128,          0,        0},
+          { 640,        524288*4,     1280,          0,        0},
+          {   8,         16,            32,          0,        65536},
+          {  64,        128,           256,          0,        65536},
+          { 640,        128,        524288,          0,        65536},
+          {  32,        448,        524288,          0,        65536},
+          {  64,        768,        524288,          0,        65536},
+          {   8,         16,            32,          0,        524288*1},
+          {  64,        128,           256,          0,        524288*1},
+          {   8,         16,            32,          0,        524288*2},
+          {  64,        128,           256,          0,        524288*2},
+          {   8,         16,            32,          0,        524288*3},
+          {  64,        128,           256,          0,        524288*3},
+          {   8,         16,            32,          0,        524288*4},
+          {  64,        128,           256,          0,        524288*4},
+          { 640,        128,      524288*2,          0,        0},
+          {  32,        448,      524288*2,          0,        0},
+          {  64,        768,      524288*2,          0,        0},
+          { 640,        128,      524288*3,          0,        0},
+          {  32,        448,      524288*3,          0,        0},
+          {  64,        768,      524288*3,          0,        0},
+          { 640,        128,      524288*4,          0,        0},
+          {  32,        448,      524288*4,          0,        0},
+          {  64,        768,      524288*4,          0,        0}
+      };
 
-  get_ref_addr(base_addr,        false,        64,        524288*1,      128,          0,        0);
-  get_ref_addr(base_addr,        false,       640,        524288*1,     1280,          0,        0);
-  get_ref_addr(base_addr,        false,        64,        524288*2,      128,          0,        0);
-  get_ref_addr(base_addr,        false,       640,        524288*2,     1280,          0,        0);
-  get_ref_addr(base_addr,        false,        64,        524288*4,      128,          0,        0);
-  get_ref_addr(base_addr,        false,       640,        524288*4,     1280,          0,        0);
+  for(int i=0;i<35;i++){
+    bool isInterleave = false;
+    int unit_skip  = normal_skip_param_array[i][0];
+    int slice_skip = normal_skip_param_array[i][1];
+    int plane_skip = normal_skip_param_array[i][2];
+    int wrap_skip  = normal_skip_param_array[i][3];
+    int cube_skip  = normal_skip_param_array[i][4];
+    get_ref_addr(base_addr, isInterleave, unit_skip, slice_skip, plane_skip, wrap_skip, cube_skip);
+  }
 
-  get_ref_addr(base_addr,        false,         8,         16,            32,          0,        65536);
-  get_ref_addr(base_addr,        false,        64,        128,           256,          0,        65536);
-  get_ref_addr(base_addr,        false,       640,        128,        524288,          0,        65536);
-  get_ref_addr(base_addr,        false,        32,        448,        524288,          0,        65536);
-  get_ref_addr(base_addr,        false,        64,        768,        524288,          0,        65536);
+  // interleave skip
+  //   base_addr  isInterleave  unit_skip  slice_skip     plane_skip   wrap_skip  cube_skip
+  int interleave_skip_param_array[][5] = {
+          {   8,         16,        524288,         32,        0},
+          {  16,         32,        524288,         64,        0},
+          {  32,         64,        524288,        128,        0},
+          {  64,        128,        524288,        256,        0},
+          {1280,         64,        524288,        128,        0},
+          {  32,       1792,        524288,         64,        0},
+          {  64,       3072,        524288,        128,        0},
+          {   8,     524288,            32,         16,        0},
+          {  16,     524288,            64,         32,        0},
+          {  32,     524288,           128,         64,        0},
+          {  64,     524288,           256,        128,        0},
+          {1280,     524288,           128,         64,        0},
+          {  32,     524288,            64,       1792,        0},
+          {  64,     524288,           128,       3072,        0}
+      };
 
-  get_ref_addr(base_addr,        false,         8,         16,            32,          0,        524288*1);
-  get_ref_addr(base_addr,        false,        64,        128,           256,          0,        524288*1);
-  get_ref_addr(base_addr,        false,         8,         16,            32,          0,        524288*2);
-  get_ref_addr(base_addr,        false,        64,        128,           256,          0,        524288*2);
-  get_ref_addr(base_addr,        false,         8,         16,            32,          0,        524288*3);
-  get_ref_addr(base_addr,        false,        64,        128,           256,          0,        524288*3);
-  get_ref_addr(base_addr,        false,         8,         16,            32,          0,        524288*4);
-  get_ref_addr(base_addr,        false,        64,        128,           256,          0,        524288*4);
+  for(int i=0;i<14;i++){
+    bool isInterleave = true;
+    int unit_skip  = interleave_skip_param_array[i][0];
+    int slice_skip = interleave_skip_param_array[i][1];
+    int plane_skip = interleave_skip_param_array[i][2];
+    int wrap_skip  = interleave_skip_param_array[i][3];
+    int cube_skip  = interleave_skip_param_array[i][4];
+    get_ref_addr(base_addr, isInterleave, unit_skip, slice_skip, plane_skip, wrap_skip, cube_skip);
+  }
 
-  get_ref_addr(base_addr,        false,       640,        128,      524288*2,          0,        0);
-  get_ref_addr(base_addr,        false,        32,        448,      524288*2,          0,        0);
-  get_ref_addr(base_addr,        false,        64,        768,      524288*2,          0,        0);
-  get_ref_addr(base_addr,        false,       640,        128,      524288*3,          0,        0);
-  get_ref_addr(base_addr,        false,        32,        448,      524288*3,          0,        0);
-  get_ref_addr(base_addr,        false,        64,        768,      524288*3,          0,        0);
-  get_ref_addr(base_addr,        false,       640,        128,      524288*4,          0,        0);
-  get_ref_addr(base_addr,        false,        32,        448,      524288*4,          0,        0);
-  get_ref_addr(base_addr,        false,        64,        768,      524288*4,          0,        0);
-
-  get_ref_addr(base_addr,         true,         8,         16,        524288,         32,        0);
-  get_ref_addr(base_addr,         true,        16,         32,        524288,         64,        0);
-  get_ref_addr(base_addr,         true,        32,         64,        524288,        128,        0);
-  get_ref_addr(base_addr,         true,        64,        128,        524288,        256,        0);
-  get_ref_addr(base_addr,         true,      1280,         64,        524288,        128,        0);
-  get_ref_addr(base_addr,         true,        32,       1792,        524288,         64,        0);
-  get_ref_addr(base_addr,         true,        64,       3072,        524288,        128,        0);
-
-  get_ref_addr(base_addr,         true,         8,     524288,            32,         16,        0);
-  get_ref_addr(base_addr,         true,        16,     524288,            64,         32,        0);
-  get_ref_addr(base_addr,         true,        32,     524288,           128,         64,        0);
-  get_ref_addr(base_addr,         true,        64,     524288,           256,        128,        0);
-  get_ref_addr(base_addr,         true,      1280,     524288,           128,         64,        0);
-  get_ref_addr(base_addr,         true,        32,     524288,            64,       1792,        0);
-  get_ref_addr(base_addr,         true,        64,     524288,           128,       3072,        0);
 }
 
