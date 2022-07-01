@@ -67,7 +67,7 @@ int main(){
   int plane_num = 10;
   int cube_num  = 2;
 
-  // normal skip
+  cout << "normal skip" << endl;
   //   base_addr  isInterleave  unit_skip  slice_skip  plane_skip cube_skip wrap_skip  
   unit_num  = 2; slice_num = 2; plane_num = 2; cube_num  = 2;
   int normal_skip_param_array[][5] = {
@@ -117,8 +117,7 @@ int main(){
     get_ref_addr(base_addr, isInterleave, unit_skip, slice_skip, plane_skip, cube_skip, wrap_skip, unit_num, slice_num, plane_num, cube_num);
   }
 
-  cout << "hello" << endl;
-  // interleave skip
+  cout << "interleave skip" << endl;
   //   base_addr  isInterleave  unit_skip  slice_skip plane_skip cube_skip  wrap_skip  
   unit_num  = 2; slice_num = 10; plane_num = 10; cube_num  = 2;
   int interleave_skip_param_array[][5] = {
@@ -151,6 +150,24 @@ int main(){
     int plane_skip = interleave_skip_param_array[i][2];
     int cube_skip  = interleave_skip_param_array[i][3];
     int wrap_skip  = interleave_skip_param_array[i][4];
+    get_ref_addr(base_addr, isInterleave, unit_skip, slice_skip, plane_skip, cube_skip, wrap_skip, unit_num, slice_num, plane_num, cube_num);
+  }
+
+  cout << "cube interleave skip" << endl;
+  unit_num  = 2; slice_num = 4; plane_num = 4; cube_num  = 10;
+  int interleave_cube_skip_param_array[][5] = {
+          {   8,         16,            64,   524288,       256},
+          {  16,         32,           128,   524288,       512},
+          {  32,         64,           256,   524288,      1024},
+          {  64,        128,           512,   524288,      2048}
+      };
+  for(int i=0;i<4;i++){
+    bool isInterleave = true;
+    int unit_skip  = interleave_cube_skip_param_array[i][0];
+    int slice_skip = interleave_cube_skip_param_array[i][1];
+    int plane_skip = interleave_cube_skip_param_array[i][2];
+    int cube_skip  = interleave_cube_skip_param_array[i][3];
+    int wrap_skip  = interleave_cube_skip_param_array[i][4];
     get_ref_addr(base_addr, isInterleave, unit_skip, slice_skip, plane_skip, cube_skip, wrap_skip, unit_num, slice_num, plane_num, cube_num);
   }
 
