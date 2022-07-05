@@ -34,7 +34,7 @@ int *get_ref_addr(int base_addr, bool isInterleave, int unit_skip, int slice_ski
   int slice_addr = cube_addr;
   int unit_addr  = cube_addr;
 
-  cout<<"base_addr= "<<base_addr<<", unit_skip= "<<unit_skip<<", slice_skip= "<<slice_skip<<", plane_skip= "<<plane_skip<<", cube_skip= "<<cube_skip<<", wrap_skip= "<<wrap_skip<<endl;
+  cout<<dec<<"base_addr= "<<base_addr<<", unit_skip= "<<unit_skip<<", slice_skip= "<<slice_skip<<", plane_skip= "<<plane_skip<<", cube_skip= "<<cube_skip<<", wrap_skip= "<<wrap_skip<<endl;
   cout << "isInterleave = " << isInterleave << endl;
   for(int cubeCnt=0; cubeCnt<cube_num;cubeCnt++){
     cout << "cubeCnt= " << cubeCnt << endl;
@@ -49,7 +49,7 @@ int *get_ref_addr(int base_addr, bool isInterleave, int unit_skip, int slice_ski
         slice_addr = get_skip_addr(slice_addr, isInterleave, wrap_skip, slice_skip);
         for(int unitCnt=0; unitCnt<unit_num;unitCnt++){
           int idx = cubeCnt*plane_num*slice_num*unit_num + planeCnt*slice_num*unit_num + sliceCnt*unit_num + unitCnt;
-          cout << "idx = " << idx << ", unit_addr = " << unit_addr << endl;
+          cout << "idx = " << idx << ", unit_addr = " << dec << unit_addr << endl;
           cubeAddrPoint[idx] = unit_addr;
           unit_addr += unit_skip;
         }
@@ -108,6 +108,7 @@ int main(){
           {  64,        768,      524288*4,               0,          0}
       };
   for(int i=0;i<35;i++){
+    cout << "normal skip -> index :" << i << endl;
     bool isInterleave = false;
     int unit_skip  = normal_skip_param_array[i][0];
     int slice_skip = normal_skip_param_array[i][1];
@@ -144,6 +145,7 @@ int main(){
           {  64,       3072,           128,   524288,       1280}
       };
   for(int i=0;i<21;i++){
+    cout << "interleave skip -> index :" << i << endl;
     bool isInterleave = true;
     int unit_skip  = interleave_skip_param_array[i][0];
     int slice_skip = interleave_skip_param_array[i][1];
@@ -162,6 +164,7 @@ int main(){
           {  64,        128,           512,   524288,      2048}
       };
   for(int i=0;i<4;i++){
+    cout << "cube interleave skip -> index :" << i << endl;
     bool isInterleave = true;
     int unit_skip  = interleave_cube_skip_param_array[i][0];
     int slice_skip = interleave_cube_skip_param_array[i][1];
