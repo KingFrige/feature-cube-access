@@ -176,8 +176,12 @@ int main(){
 
   // instance
   int *p = get_ref_addr(base_addr, false, 8, 16, 32, 0, 0, unit_num, slice_num, plane_num, cube_num);
-  for(int i=0;i<16;i++){
-    cout << ">>> " << p[i] << endl;
+  for(int i=0;i<unit_num*slice_num*plane_num*cube_num;i++){
+    cout << "p = " << p[i] << endl;
+  }
+  int *tmpPoint = get_ref_addr(262144, true, 64, 768, 524288, 0, 768, 12, 1, 12, 1);
+  for(int i=0;i<12*1*12*1;i++){
+    cout << "tmpPoint = " << tmpPoint[i] << endl;
   }
 }
 
