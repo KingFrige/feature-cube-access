@@ -23,6 +23,9 @@
   * cube skip
   * wrap skip
 
+![](cube.svg)
+
+
 ## run
 
 ```bash
