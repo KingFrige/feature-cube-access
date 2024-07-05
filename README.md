@@ -8,20 +8,27 @@
 [22:20] - bankIdx
 ```
 
+
 ## function
 
-- feature cube address generate
+- feature cube address generate 
 
-- skip mode
-  * normal skip
-  * interleave skip
+## Tensor descriptor
 
-- skip
+### skip/stride
+
   * unit skip
   * slice skip
   * plane skip
   * cube skip
-  * wrap skip
+
+
+### num/dim
+
+  * unit number
+  * slice number
+  * plane number
+  * cube number
 
 ![](cube.svg)
 
